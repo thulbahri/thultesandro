@@ -33,7 +33,8 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Object NotificationManager;
+    Notification_receiver notification_receiver = new Notification_receiver();
+    Notification_receiver1 notification_receiver1 = new Notification_receiver1();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,43 +57,11 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-//                Calendar[] calendar = new Calendar[2];
-//                int jam[] = {6,6};
-//                int menit[] = {57, 59};
-//                int detik[] = {0, 0};
-//
-//                for (int i = 0; i < 2; i++) {
-//                    calendar[i] = Calendar.getInstance();
-//                    calendar[i].set(Calendar.HOUR_OF_DAY, jam[i]);
-//                    calendar[i].set(Calendar.MINUTE, menit[i]);
-//                    calendar[i].set(Calendar.SECOND, detik[i]);
-//                };
-//                Intent intent = new Intent(getApplicationContext(), Notification_receiver.class);
-//                intent.setAction(Long.toString(System.currentTimeMillis()));
-//
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                for (int i = 0; i < 2; i++) {
-//                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar[i].getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
-//                };
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 3);
-        calendar.set(Calendar.SECOND, 0);
-        Intent intent = new Intent(getApplicationContext(), Notification_receiver.class);
-//        intent.setAction(Long.toString(System.currentTimeMillis()));
-        PendingIntent pendingIntent = PendingIntent.getService(MainActivity.this,100, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
-//
-//        Calendar calendar1 = Calendar.getInstance();
-//        calendar1.set(Calendar.HOUR_OF_DAY, 7);
-//        calendar1.set(Calendar.MINUTE, 49);
-//        calendar1.set(Calendar.SECOND, 0);
-//        Intent intent1 = new Intent(getApplicationContext(), Notification_receiver1.class);
-//        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(getApplicationContext(),90, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        alarmManager1.setRepeating(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent1);
+
+        //Pemanggilan Method Alarm Pertama
+        notification_receiver.setRepeatingAlarm(getApplicationContext());
+        //Pemanggilan Method Alarm Keuda
+        notification_receiver1.setRepeatingAlarm(getApplicationContext());
 
 
     }

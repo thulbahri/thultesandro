@@ -1,31 +1,80 @@
 package com.example.friendtojannah;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Notification_receiver extends BroadcastReceiver {
+
+    private String jam = "08:00";//Set Waktu
+    private int jamInt = 800; //SetCheckJam 800 = 8:00
+
     @Override
     public void onReceive(Context context, Intent intent){
+        Date now = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HHmm");
+        String finalDate = dateFormat.format(now);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Integer.valueOf(finalDate) == jamInt) { //Check apakah waktunya sama dengan jam 9:00
+            String CHANNEL_ID = "Channel_111";
+            String CHANNEL_NAME = "AlarmManager_Channel";
+            NotificationManager notificationManagerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setContentTitle("Alarm Pertama!!") //Title
+                    .setContentText("Alarm Message!!") //Message
+                    .setColor(ContextCompat.getColor(context, android.R.color.transparent))
+                    .setGroup(CHANNEL_NAME)
+                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                    .setSound(alarmSound);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+                channel.enableVibration(true);
+                channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+                builder.setChannelId(CHANNEL_ID);
+                if (notificationManagerCompat != null) {
+                    notificationManagerCompat.createNotificationChannel(channel);
+                }
+                Notification notification = builder.build();
+                if (notificationManagerCompat != null) {
+                    notificationManagerCompat.notify(111, notification);
+                }
 
-        Intent repeating_intent = new Intent(context, Repeating_activity.class);
-//        intent.setAction(Long.toString(System.currentTimeMillis()))
-        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, repeating_intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+    }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(android.R.drawable.arrow_up_float)
-                .setContentTitle("Notification title")
-                .setContentText("Notification text")
-                .setAutoCancel(true);
-        notificationManager.notify(100, builder.build());
+    public void setRepeatingAlarm(Context context){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        String setTime = jam;
+        String timeArray[] = setTime.split(":");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
+        calendar.set(Calendar.SECOND, 0);
+        Intent intent = new Intent(context, Notification_receiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 111, intent, 0);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 }
