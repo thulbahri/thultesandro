@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="351dp"
+        android:layout_height="378dp"
+        android:text="Dari ‘Aisyah radhiyallahu ‘anha dari Nabi shallallahu ‘alaihi wa sallam bersabda : “Dua raka’at salat Fajr lebih baik dari pada dunia dan seisinya.” [HR. Muslim] dalam riwayat lain dengan lafazh : “Sungguh kedua raka’at tersebut lebih aku cintai daripada dunia semuanya."
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="26dp" />
+
+</android.support.constraint.ConstraintLayout>
